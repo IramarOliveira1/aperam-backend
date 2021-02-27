@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\cliente\ClienteController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Cliente\ClienteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/store', [ClienteController::class, 'store'])->name('storeCliente');
+Route::post('/login', [AuthController::class, 'login']);
+
+
+Route::group(['middleware' => ['apiJwt']], function() {
+    route::get('/logout', [AuthController::class, 'logout']);
+    route::get('/refresh', [AuthController::class, 'refresh']);
+});
+
+Route::post('/store', [ClienteController::class, 'store']);
