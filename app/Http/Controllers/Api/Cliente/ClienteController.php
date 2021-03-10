@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api\Cliente;
 
-use App\Http\Controllers\Controller;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class ClienteController extends Controller
 {
@@ -20,31 +19,19 @@ class ClienteController extends Controller
     {
         try {
 
-            $updateField = [
-                'nome' => $request->name,
-                'email' => $request->email,
-                'senha' => $request->password
-            ];
+            $verifyEmail = Cliente::where('email', $request->email)->first();
 
-            $validate = Validator::make($updateField, [
-                'nome' => 'required',
-                'email' => 'required|email|unique:clientes',
-                'senha' => 'required'
-            ]);
-
-            if ($validate->fails()) {
+            if ($verifyEmail) {
                 return response()->json([
-                    'message' => $validate->errors()->messages(),
+                    'message' => 'Já existe uma conta com esse e-mail.',
                     'error' => true
                 ], 400);
             }
 
-            $cryptography = Hash::make($request->password);
-
             $save = Cliente::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $cryptography
+                'password' => Hash::make($request->password)
             ]);
 
             return response()->json([
@@ -57,5 +44,19 @@ class ClienteController extends Controller
                 'error' => true
             ], 400);
         }
+    }
+
+    public function retrieveOne($id)
+    {
+        $oneClient = Cliente::where('id', $id)->first(['email', 'name']);
+
+        if (is_null($oneClient)) {
+            return response()->json([
+                'message' => 'Cliente não encontrado.',
+                'error' => true
+            ], 404);
+        }
+
+        return response()->json($oneClient, 200);
     }
 }

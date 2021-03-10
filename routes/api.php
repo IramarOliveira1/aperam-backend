@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Cliente\ClienteController;
+use App\Http\Controllers\Api\Email\SendMailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,8 +18,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::post('/send-mail', [SendMailController::class, 'sendMail']);
 
-Route::group(['middleware' => ['apiJwt']], function() {
+Route::get('/send-link/{id}', [SendMailController::class, 'verifyToken']);
+
+Route::get('/client/{id}', [ClienteController::class, 'retrieveOne'] );
+
+Route::put('/change-password/{id}', [SendMailController::class, 'changePassword']);
+
+Route::group(['middleware' => ['apiJwt']], function () {
     route::get('/logout', [AuthController::class, 'logout']);
     route::get('/refresh', [AuthController::class, 'refresh']);
 });

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Models\Cliente;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -18,7 +20,7 @@ class AuthController extends Controller
 
         if (!$token = auth('api')->attempt($credentials)) {
             return response()->json([
-                'message' => utf8_encode('Email ou Senha inválidos!'),
+                'message' => 'Email ou Senha invÃ¡lidos!',
                 'error' => 'true'
             ], 401);
         }
@@ -60,10 +62,15 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+       $user = Auth::user();
+
         return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
+            'expires_in' => auth('api')->factory()->getTTL() * 604800,
         ], 200);
     }
 }
