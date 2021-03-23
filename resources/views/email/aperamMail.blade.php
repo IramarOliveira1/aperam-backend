@@ -4,7 +4,6 @@
         justify-content: center;
         align-items: center
     }
-
     .button-link a {
         margin-top:  15px;
         background-color: #2d3748;
@@ -29,7 +28,7 @@
 <p>Se você fez essa solicitação, por favor, clique no botão abaixo:</p>
 
 <div class="button-link">
-    <a href="http://127.0.0.1:8000/api/send-link/{{ $token }}" target="_blank">Cadastrar Nova Senha</a>
+    <a href="https://aperam.vercel.app/nova-senha/{{ $token }}" target="_blank">Cadastrar Nova Senha</a>
 </div>
 
 @endcomponent

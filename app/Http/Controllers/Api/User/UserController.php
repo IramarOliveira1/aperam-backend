@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api\Cliente;
+namespace App\Http\Controllers\Api\User;
 
-use App\Models\Cliente;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
-class ClienteController extends Controller
+class UserController extends Controller
 {
-    /**
+      /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -19,7 +19,7 @@ class ClienteController extends Controller
     {
         try {
 
-            $verifyEmail = Cliente::where('email', $request->email)->first();
+            $verifyEmail = User::where('email', $request->email)->first();
 
             if ($verifyEmail) {
                 return response()->json([
@@ -28,7 +28,7 @@ class ClienteController extends Controller
                 ], 400);
             }
 
-            $save = Cliente::create([
+            $save = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
@@ -48,7 +48,7 @@ class ClienteController extends Controller
 
     public function retrieveOne($id)
     {
-        $oneClient = Cliente::where('id', $id)->first(['email', 'name']);
+        $oneClient = User::where('id', $id)->first(['email', 'name']);
 
         if (is_null($oneClient)) {
             return response()->json([

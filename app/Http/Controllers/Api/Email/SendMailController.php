@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Api\Email;
 
-date_default_timezone_set('America/Sao_Paulo');
-
-use App\Models\Cliente;
 use App\Mail\AperamMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
@@ -19,7 +17,7 @@ class SendMailController extends Controller
     {
         try {
 
-            $validate = Cliente::where('email', $request->email)->first();
+            $validate = User::where('email', $request->email)->first();
 
             if (empty($validate)) {
                 return response()->json([
@@ -44,7 +42,7 @@ class SendMailController extends Controller
         try {
             $decryptToken = Crypt::decrypt($token);
 
-            $response = Cliente::where('id', $decryptToken)->first('id');
+            $response = User::where('id', $decryptToken)->first('id');
 
             return $status == false ? ['statusCode' => 200] : $response;
         } catch (DecryptException  $th) {
@@ -63,15 +61,16 @@ class SendMailController extends Controller
             return $response;
         }
 
-        $cliente = Cliente::find($response->id);
+        $User = User::find($response->id);
 
-        $cliente->update([
+        $User->update([
             'password' => Hash::make($request->password),
-            'updated_at' => date('d-m-Y')
+            'updated_at' => now()
         ]);
 
         return response()->json([
             'message' => 'Senha alterada com sucesso!',
+            'email' => $User->email,
             'error' => false
         ], 200);
     }
