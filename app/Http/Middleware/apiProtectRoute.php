@@ -19,21 +19,21 @@ class apiProtectRoute extends BaseMiddleware
     public function handle(Request $request, Closure $next)
     {
         try {
-            $user = JWTAuth::parseToken()->authenticate();
+            JWTAuth::parseToken()->authenticate();
         } catch (\Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
                 return response()->json([
-                    'message' => 'Token é inválido !',
+                    'message' => 'Token é inválido!',
                     'error' => true
                 ], 401);
             } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
                 return response()->json([
-                    'message' => 'O token está expirado',
+                    'message' => 'O token está expirado!',
                     'error' => true
                 ], 401);
             } else {
                 return response()->json([
-                    'message' => 'Token de autorização não encontrado',
+                    'message' => 'Token de autorização não encontrado!',
                     'error' => true
                 ], 404);
             }
