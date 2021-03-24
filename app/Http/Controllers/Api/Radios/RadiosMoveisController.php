@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\RadiosMoveis;
+namespace App\Http\Controllers\Api\Radios;
 
 use App\Http\Controllers\Controller;
 use App\Models\RadiosMoveis;
@@ -70,6 +70,7 @@ class RadiosMoveisController extends Controller
 
             $content = RadiosMoveis::find($id);
             $content->update($request->all());
+
             return response()->json([
                 'data' => $content,
                 'error' => false

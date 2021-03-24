@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Email\SendMailController;
-use App\Http\Controllers\Api\RadiosMoveis\RadiosMoveisController;
+use App\Http\Controllers\Api\Radios\RadiosMoveisController;
+use App\Http\Controllers\Api\Radios\RadiosPortateisController;
 use App\Http\Controllers\Api\User\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,5 +38,12 @@ Route::group(['middleware' => ['apiJwt']], function () {
         Route::post('/store', [RadiosMoveisController::class, 'store']);
         Route::delete('/destroy/{id}', [RadiosMoveisController::class, 'destroy']);
         Route::put('/update/{id}', [RadiosMoveisController::class, 'update']);
+    });
+
+    Route::prefix('/radios-portateis')->group(function () {
+        Route::get('/index', [RadiosPortateisController::class, 'index']);
+        Route::post('/store', [RadiosPortateisController::class, 'store']);
+        Route::delete('/destroy/{id}', [RadiosPortateisController::class, 'destroy']);
+        Route::put('/update/{id}', [RadiosPortateisController::class, 'update']);
     });
 });
