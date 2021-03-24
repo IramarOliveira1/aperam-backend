@@ -28,8 +28,8 @@ Route::get('/send-link/{id}', [SendMailController::class, 'verifyToken']);
 Route::put('/change-password/{id}', [SendMailController::class, 'changePassword']);
 
 Route::group(['middleware' => ['apiJwt']], function () {
-    route::get('/logout', [AuthController::class, 'logout']);
-    route::get('/refresh', [AuthController::class, 'refresh']);
+    Route::get('/logout', [AuthController::class, 'logout']);
+    Route::get('/refresh', [AuthController::class, 'refresh']);
     Route::get('/users/{id}', [UserController::class, 'retrieveOne']);
 
     Route::prefix('/radios-moveis')->group(function () {
