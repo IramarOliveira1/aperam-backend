@@ -25,7 +25,7 @@ class RadiosPortateisController extends Controller
         ], 200);
     }
 
-    public function uploadFile($request)
+    public function uploadImage($request)
     {
         if ($request->hasFile('imagem')) {
             if ($request->file('imagem')->isValid()) {
@@ -34,17 +34,14 @@ class RadiosPortateisController extends Controller
                     'imagem' => 'mimes:jpeg,png|max:2048',
                 ]);
 
-                $extension = $request->imagem->extension();
+                $url = $request->file('imagem')->store('upload');
 
-                $path = $request->imagem->storeAs('/upload', Str::random(15) . "." . $extension);
+                $path = env('APP_URL') . 'storage/' . $url;
 
-                $url = Storage::url($path);
-
-                return $url;
+                return $path;
             }
         }
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -62,7 +59,7 @@ class RadiosPortateisController extends Controller
                 'regiao' => $request->regiao,
                 'responsavel' => $request->responsavel,
                 'instalacao' => $request->instalacao,
-                'imagem' => $this->uploadFile($request),
+                'imagem' => $this->uploadImage($request),
             ]);
 
             return response()->json([
