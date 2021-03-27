@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\RadiosPortateis;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class RadiosPortateisController extends Controller
 {
@@ -32,10 +33,6 @@ class RadiosPortateisController extends Controller
         if ($request->hasFile('imagem')) {
             if ($request->file('imagem')->isValid()) {
 
-                $request->validate([
-                    'imagem' => 'mimes:jpeg,jpg,png|max:2048',
-                ]);
-
                 $path = $request->file('imagem')->store('upload');
 
                 return $path;
@@ -52,6 +49,18 @@ class RadiosPortateisController extends Controller
     public function store(Request $request)
     {
         try {
+
+            $validator = Validator::make($request->all(), [
+                'imagem' => 'mimes:jpeg,jpg,png|max:2048',
+            ], [
+                'imagem.mimes' => 'A imagem deve ser um arquivo do tipo: jpeg, jpg, png',
+                'imagem.max' => 'A imagem não pode ser maior que 2 MB.'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 400);
+            }
+
             $save = RadiosPortateis::create([
                 'patrimonio' => $request->patrimonio,
                 'radio_modelo' => $request->radio_modelo,
