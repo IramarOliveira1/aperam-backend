@@ -44,6 +44,6 @@ Route::group(['middleware' => ['apiJwt']], function () {
         Route::get('/index', [RadiosPortateisController::class, 'index']);
         Route::post('/store', [RadiosPortateisController::class, 'store']);
         Route::delete('/destroy/{id}', [RadiosPortateisController::class, 'destroy']);
-        Route::put('/update/{id}', [RadiosPortateisController::class, 'update']);
+        Route::post('/update/{id}', [RadiosPortateisController::class, 'update']);
     });
 });

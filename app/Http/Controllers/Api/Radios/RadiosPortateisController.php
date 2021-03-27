@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Radios;
 
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\RadiosPortateis;
 use App\Http\Controllers\Controller;
@@ -17,10 +16,13 @@ class RadiosPortateisController extends Controller
      */
     public function index()
     {
-        $alls = RadiosPortateis::all();
+        $getAlls = RadiosPortateis::all()->map(function ($item) {
+            $item->imagem = Storage::url('') . $item->imagem;
+            return $item;
+        });
 
         return response()->json([
-            'data' => $alls,
+            'data' => $getAlls,
             'error' => false
         ], 200);
     }
@@ -31,12 +33,10 @@ class RadiosPortateisController extends Controller
             if ($request->file('imagem')->isValid()) {
 
                 $request->validate([
-                    'imagem' => 'mimes:jpeg,png|max:2048',
+                    'imagem' => 'mimes:jpeg,jpg,png|max:2048',
                 ]);
 
-                $url = $request->file('imagem')->store('upload');
-
-                $path = env('APP_URL') . 'storage/' . $url;
+                $path = $request->file('imagem')->store('upload');
 
                 return $path;
             }
@@ -59,7 +59,7 @@ class RadiosPortateisController extends Controller
                 'regiao' => $request->regiao,
                 'responsavel' => $request->responsavel,
                 'instalacao' => $request->instalacao,
-                'imagem' => $this->uploadImage($request),
+                'imagem' => $this->uploadImage($request)
             ]);
 
             return response()->json([
@@ -95,9 +95,20 @@ class RadiosPortateisController extends Controller
     public function update(Request $request, $id)
     {
         try {
-
             $content = RadiosPortateis::find($id);
-            $content->update($request->all());
+
+            Storage::delete($content->imagem);
+
+            $content->update([
+                'patrimonio' => $request->patrimonio,
+                'radio_modelo' => $request->radio_modelo,
+                'numero_serie' => $request->numero_serie,
+                'regiao' => $request->regiao,
+                'responsavel' => $request->responsavel,
+                'instalacao' => $request->instalacao,
+                'imagem' => $this->uploadImage($request),
+                'updated_at' => now()
+            ]);
 
             return response()->json([
                 'data' => $content,
@@ -120,6 +131,11 @@ class RadiosPortateisController extends Controller
     public function destroy($id)
     {
         try {
+
+            $pathImage = RadiosPortateis::where('id', $id)->first(['id', 'imagem']);
+
+            Storage::delete($pathImage->imagem);
+
             RadiosPortateis::destroy($id);
 
             return response()->json([
