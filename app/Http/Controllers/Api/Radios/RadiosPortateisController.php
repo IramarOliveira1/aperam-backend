@@ -17,13 +17,13 @@ class RadiosPortateisController extends Controller
      */
     public function index()
     {
-        $getAlls = RadiosPortateis::all()->map(function ($item) {
+        $getAll = RadiosPortateis::all()->map(function ($item) {
             $item->imagem = Storage::url('') . $item->imagem;
             return $item;
         });
 
         return response()->json([
-            'data' => $getAlls,
+            'data' => $getAll,
             'error' => false
         ], 200);
     }

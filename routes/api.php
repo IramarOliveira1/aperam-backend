@@ -31,7 +31,11 @@ Route::put('/change-password/{id}', [SendMailController::class, 'changePassword'
 Route::group(['middleware' => ['apiJwt']], function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/users/{id}', [UserController::class, 'retrieveOne']);
+
+    Route::prefix('users')->group(function () {
+        Route::get('/retrieveOne/{id}', [UserController::class, 'retrieveOne']);
+        Route::get('/index', [UserController::class, 'index']);
+    });
 
     Route::prefix('/radios-moveis')->group(function () {
         Route::get('/index', [RadiosMoveisController::class, 'index']);
