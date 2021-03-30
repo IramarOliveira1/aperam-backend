@@ -86,12 +86,22 @@ class RadiosPortateisController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function filter(Request $request)
     {
-        //
+        $filter = RadiosPortateis::where('patrimonio', $request->query('patrimonio'))
+            ->orWhere('numero_serie', $request->query('numero_serie'))
+            ->get();
+
+        if ($filter->isEmpty()) {
+            return response()->json([
+                'message' => 'Nenhum dado encontrado!'
+            ], 404);
+        }
+
+        return response()->json($filter, 200);
     }
 
     /**

@@ -35,6 +35,7 @@ Route::group(['middleware' => ['apiJwt']], function () {
 
     Route::prefix('/radios-moveis')->group(function () {
         Route::get('/index', [RadiosMoveisController::class, 'index']);
+        Route::get('/filter', [RadiosMoveisController::class, 'filter']);
         Route::post('/store', [RadiosMoveisController::class, 'store']);
         Route::delete('/destroy/{id}', [RadiosMoveisController::class, 'destroy']);
         Route::put('/update/{id}', [RadiosMoveisController::class, 'update']);
@@ -42,6 +43,7 @@ Route::group(['middleware' => ['apiJwt']], function () {
 
     Route::prefix('/radios-portateis')->group(function () {
         Route::get('/index', [RadiosPortateisController::class, 'index']);
+        Route::get('/filter', [RadiosPortateisController::class, 'filter']);
         Route::post('/store', [RadiosPortateisController::class, 'store']);
         Route::delete('/destroy/{id}', [RadiosPortateisController::class, 'destroy']);
         Route::post('/update/{id}', [RadiosPortateisController::class, 'update']);
