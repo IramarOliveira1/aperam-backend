@@ -32,7 +32,7 @@ Route::group(['middleware' => ['apiJwt']], function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/refresh', [AuthController::class, 'refresh']);
 
-    Route::prefix('users')->group(function () {
+    Route::prefix('/users')->group(function () {
         Route::get('/retrieveOne/{id}', [UserController::class, 'retrieveOne']);
         Route::get('/index', [UserController::class, 'index']);
     });
