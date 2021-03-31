@@ -67,12 +67,14 @@ class RadiosPortateisController extends Controller
                 'numero_serie' => $request->numero_serie,
                 'regiao' => $request->regiao,
                 'responsavel' => $request->responsavel,
+                'departamento' => $request->departamento,
                 'instalacao' => $request->instalacao,
                 'imagem' => $this->uploadImage($request)
             ]);
 
             return response()->json([
                 'data' => $save,
+                'url' => Storage::url('') . $save->imagem,
                 'error' => false
             ], 201);
         } catch (\Throwable $th) {
@@ -116,7 +118,14 @@ class RadiosPortateisController extends Controller
         try {
             $content = RadiosPortateis::find($id);
 
-            Storage::delete($content->imagem);
+            if ($request->hasFile('imagem')) {
+
+                Storage::delete($content->imagem);
+
+                $content->update([
+                    'imagem' => $this->uploadImage($request),
+                ]);
+            }
 
             $content->update([
                 'patrimonio' => $request->patrimonio,
@@ -124,8 +133,8 @@ class RadiosPortateisController extends Controller
                 'numero_serie' => $request->numero_serie,
                 'regiao' => $request->regiao,
                 'responsavel' => $request->responsavel,
+                'departamento' => $request->departamento,
                 'instalacao' => $request->instalacao,
-                'imagem' => $this->uploadImage($request),
                 'updated_at' => now()
             ]);
 

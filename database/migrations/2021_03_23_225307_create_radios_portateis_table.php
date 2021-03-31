@@ -20,6 +20,7 @@ class CreateRadiosPortateisTable extends Migration
             $table->string('numero_serie');
             $table->string('regiao');
             $table->string('responsavel');
+            $table->string('departamento');
             $table->date('instalacao');
             $table->string('imagem');
             $table->timestamps();

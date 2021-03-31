@@ -20,6 +20,7 @@ class RadiosPortateis extends Model
         'numero_serie',
         'regiao',
         'responsavel',
+        'departamento',
         'instalacao',
         'imagem'
     ];

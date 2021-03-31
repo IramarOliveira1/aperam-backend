@@ -32,18 +32,10 @@ Route::group(['middleware' => ['apiJwt']], function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/refresh', [AuthController::class, 'refresh']);
 
-    Route::prefix('/users')->group(function () {
-        Route::get('/retrieveOne/{id}', [UserController::class, 'retrieveOne']);
-        Route::get('/index', [UserController::class, 'index']);
-    });
+    Route::resource('/users', UserController::class);
 
-    Route::prefix('/radios-moveis')->group(function () {
-        Route::get('/index', [RadiosMoveisController::class, 'index']);
-        Route::get('/filter', [RadiosMoveisController::class, 'filter']);
-        Route::post('/store', [RadiosMoveisController::class, 'store']);
-        Route::delete('/destroy/{id}', [RadiosMoveisController::class, 'destroy']);
-        Route::put('/update/{id}', [RadiosMoveisController::class, 'update']);
-    });
+    Route::get('/radios-moveis/filter', [RadiosMoveisController::class, 'filter']);
+    Route::resource('/radios-moveis', RadiosMoveisController::class);
 
     Route::prefix('/radios-portateis')->group(function () {
         Route::get('/index', [RadiosPortateisController::class, 'index']);
