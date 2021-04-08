@@ -13,14 +13,11 @@ class RadiosMoveisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $alls = RadiosMoveis::all();
+        $getAll = RadiosMoveis::orderBy('id', $request->query('tipo') ? 'DESC' : 'ASC')->paginate(7);
 
-        return response()->json([
-            'data' => $alls,
-            'error' => false
-        ], 200);
+        return response()->json($getAll, 200);
     }
 
     /**
@@ -44,27 +41,6 @@ class RadiosMoveisController extends Controller
                 'error' => true
             ], 400);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function filter(Request $request)
-    {
-        $filter = RadiosMoveis::where('patrimonio', $request->query('patrimonio'))
-            ->orWhere('numero_serie', $request->query('numero_serie'))
-            ->get();
-
-        if ($filter->isEmpty()) {
-            return response()->json([
-                'message' => 'Nenhum dado encontrado!'
-            ], 404);
-        }
-
-        return response()->json($filter, 200);
     }
 
     /**
